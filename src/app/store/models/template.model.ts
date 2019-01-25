@@ -18,9 +18,9 @@ interface Node {
 }
 
 interface Template {
-  'id': number;
-  'name': string;
-  'template_type': string;
-  'content': string;
-  'css': string;
+  id: number;
+  name: string;
+  template_type: string;
+  content: string;
+  css: string;
 }

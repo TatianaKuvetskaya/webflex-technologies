@@ -7,23 +7,31 @@ import { AppComponent } from './app.component';
 import {HomeComponent} from './home/home.component';
 import {routes} from './router.const';
 import {RouterModule, Routes} from '@angular/router';
-import {HomeModule} from './home/home.module';
+import {NotFoundComponent} from './not-found/not-found.component';
+import {EffectsModule} from '@ngrx/effects';
+import {TemplateEffects} from './store/effects/template.effects';
+import {HomeService} from './home/home.service';
 
 const appRoutes: Routes = [
   {path: routes.home, component: HomeComponent},
   {path: routes.name, component: HomeComponent},
-  {path: '**', redirectTo: routes.home},
+  {path: '**', component: NotFoundComponent},
 ];
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomeComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
     StoreModule.forRoot({'templateData': templateReducer}),
     RouterModule.forRoot(appRoutes),
-    HomeModule,
+    EffectsModule.forRoot([TemplateEffects])
+  ],
+  providers: [
+    HomeService
   ],
   bootstrap: [AppComponent]
 })

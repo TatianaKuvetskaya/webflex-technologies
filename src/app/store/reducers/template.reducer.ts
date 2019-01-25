@@ -1,8 +1,12 @@
-import { TemplateData } from '../models/template.model';
+import {TemplateData} from '../models/template.model';
 import * as TemplateActions from '../actions/template.actions';
 import {templateData} from '../../templateData.const';
 
-const initialState: TemplateData = templateData;
+const initialState: TemplateData = {
+  tenant: null,
+  nodes: [],
+  templates: []
+};
 
 export function templateReducer(state: TemplateData[] = [initialState], action: TemplateActions.Actions) {
 
