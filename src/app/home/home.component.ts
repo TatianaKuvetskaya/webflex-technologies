@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import * as _ from 'lodash';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable, Subject, Subscription} from 'rxjs';
+import { Subject, Subscription} from 'rxjs';
 import {TemplateData} from '../store/models';
 import {Store} from '@ngrx/store';
 import * as templateActions from '../store/actions/template.actions';
@@ -15,7 +15,6 @@ import {HeadStylesService} from './head-styles.service';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  private sub: Subscription;
   private templateData: TemplateData;
   destroy$: Subject<boolean> = new Subject<boolean>();
 
@@ -28,10 +27,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(new templateActions.GetTemplate());
-    this.getTemplateData();
+    this.subscribeOnTemplateData();
   }
 
-  getTemplateData() {
+  subscribeOnTemplateData() {
     this.store.select('templates')
       .pipe(takeUntil(this.destroy$))
       .subscribe((templateData: TemplateData) => {
@@ -45,7 +44,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   subscribeOnRouter() {
-    this.sub = this.route.fragment
+    this.route.fragment
       .pipe(takeUntil(this.destroy$))
       .subscribe(name => {
         if (!name || name === '/') {
