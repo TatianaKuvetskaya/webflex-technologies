@@ -32,7 +32,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getTemplateData() {
-    this.store.select('templateData')
+    this.store.select('templates')
       .pipe(takeUntil(this.destroy$))
       .subscribe((templateData: TemplateData) => {
         if (!templateData.tenant) {

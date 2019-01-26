@@ -26,7 +26,7 @@ const appRoutes: Routes = [
   ],
   imports: [
     BrowserModule,
-    StoreModule.forRoot({'templateData': templateReducer}),
+    StoreModule.forRoot({templates: templateReducer}),
     RouterModule.forRoot(appRoutes),
     EffectsModule.forRoot([TemplateEffects])
   ],
