@@ -10,7 +10,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {NotFoundComponent} from './not-found/not-found.component';
 import {EffectsModule} from '@ngrx/effects';
 import {TemplateEffects} from './store/effects/template.effects';
-import {HomeService} from './home/home.service';
+import {HeadStylesService} from './home/head-styles.service';
 
 const appRoutes: Routes = [
   {path: routes.home, component: HomeComponent},
@@ -31,7 +31,7 @@ const appRoutes: Routes = [
     EffectsModule.forRoot([TemplateEffects])
   ],
   providers: [
-    HomeService
+    HeadStylesService
   ],
   bootstrap: [AppComponent]
 })

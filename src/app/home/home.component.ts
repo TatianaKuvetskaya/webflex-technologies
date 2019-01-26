@@ -7,7 +7,7 @@ import {Store} from '@ngrx/store';
 import * as templateActions from '../store/actions/template.actions';
 import {AppState} from '../store/app.state';
 import {takeUntil} from 'rxjs/operators';
-import {HomeService} from './home.service';
+import {HeadStylesService} from './head-styles.service';
 
 @Component({
   selector: 'app-home',
@@ -18,36 +18,28 @@ export class HomeComponent implements OnInit, OnDestroy {
   private sub: Subscription;
   private templateData: TemplateData;
   destroy$: Subject<boolean> = new Subject<boolean>();
-  public templateDataSub: Observable<TemplateData[]> = this.store.select('templateData');
 
   constructor(private store: Store<AppState>,
               private router: Router,
-              private homeService: HomeService,
+              private headStylesService: HeadStylesService,
               private route: ActivatedRoute) {
-    this.store.dispatch(new templateActions.GetTemplate());
-    if (!this.homeService.sheet) {
-      this.homeService.sheet = document.createElement('style');
-      document.getElementsByTagName('head')[0].appendChild(this.homeService.sheet);
-    }
+    this.headStylesService.createSheet();
   }
 
   ngOnInit() {
+    this.store.dispatch(new templateActions.GetTemplate());
     this.getTemplateData();
   }
 
   getTemplateData() {
-    this.templateDataSub
+    this.store.select('templateData')
       .pipe(takeUntil(this.destroy$))
-      .subscribe((templates: TemplateData[]) => {
-        if (!templates.templateData) {
+      .subscribe((templateData: TemplateData) => {
+        if (!templateData.tenant) {
           return;
         }
-        this.templateData = templates.templateData;
-        if (!this.homeService.tenantStyles) {
-          this.homeService.tenantStyles = document.createElement('style');
-          this.homeService.tenantStyles.innerHTML = this.templateData.tenant.css;
-          document.getElementsByTagName('head')[0].appendChild(this.homeService.tenantStyles);
-        }
+        this.templateData = templateData;
+        this.headStylesService.setTenantStyles(this.templateData.tenant.css);
         this.subscribeOnRouter();
       });
   }
@@ -74,7 +66,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       content: node.content.html,
       node
     };
-    this.homeService.sheet.innerHTML = template.css;
+    this.headStylesService.setTemplateStyles(template.css);
     const html = _.template(template.content)(data)
       .replace(/href="/g, 'href="/#')
       .replace(/href="\/#javascript/g, 'href="javascript');

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import {Actions, Effect, ofType} from '@ngrx/effects';
-import { map } from 'rxjs/operators';
+import {delay, map} from 'rxjs/operators';
 
 import * as templateActions from '../actions/template.actions';
 import {templateData} from '../../templateData.const';
@@ -15,9 +15,8 @@ export class TemplateEffects {
   getTemplates$ = this.actions$
     .pipe(
       ofType(templateActions.GET_TEMPLATES),
-      map(() =>  setTimeout(() => {
-        this.store.dispatch(new templateActions.AddTemplate(templateData));
-      }, 1500))
+      delay(1500),
+      map(() => this.store.dispatch(new templateActions.GetTemplateSuccess(templateData)))
     );
 
   constructor(
